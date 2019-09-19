@@ -2,7 +2,7 @@ const cartschema = require('../models/cart.model');
 const productschema = require('../models/products.model');
 
 //Add product to cart through cartid
-exports.addProductToCart =async function(req,res){
+exports. addProductToCart =async function(req,res){
     const productdetails = req.body;
     usercartid  = req.params.id;
     const data =await new cartschema({
@@ -52,10 +52,11 @@ exports.getProductFromCart =async function(req,res){
 }   
 
 //Add more products to cart through cartid
-exports.addMoreProductsToCart = function(req,res){
+exports.addMoreProductsToCart =async function(req,res){
     console.log('inside addmoreproducts function');
     productdetails = req.body;
-    const data = cartschema.findOneAndUpdate({cartid:req.params.id},{$push:{productid :productdetails.productid}},function(err,docs){
+    const product = await productschema.findOneAndUpdate({_id:productdetails.productid},{$inc:{counter:-1}})
+    const data = await cartschema.findOneAndUpdate({cartid:req.params.id},{$push:{productid :productdetails.productid}},function(err,docs){
         if(err){
             return res.send({
                 status:false,
