@@ -16,16 +16,25 @@ exports.postregister = async (req, res) => {
     personinfo.password = hash;
     const data = await new registerSchema(personinfo, function (err) {
         if (err) {
-            return res.send(err)
+            return res.send({
+                status : false,
+                Error : err
+            })
         }
     })
     await data.save(function (err, any) {
         if (err) {
-            return res.send(err);
+            return res.send({
+                status : false,
+                Error : err
+            });
         } else {
             const token = data.generateauthtoken();
             console.log(token);
-            return res.header('x-auth-token',token).send(any);
+            return res.header('x-auth-token',token).status(200).send({
+                status : true,
+                Data : any
+            });
         }
 
     })
@@ -33,12 +42,35 @@ exports.postregister = async (req, res) => {
 }
 
 //get
-exports.getregister = async (req, res) =>{
+exports.getuserdata = async (req, res) =>{
     const data =await registerSchema.find(function (err, data) {
         if (err) {
-            return res.send(err);
+            return res.status(400).send({
+                status : false,
+                Error : err
+            });
         } else {
-            return res.send(data);
+            return res.status(200).send({
+                status : true,
+                Data : data
+            });
+        }
+    })
+}
+
+//Delete
+exports.deleteuser =async function(req,res){
+    const data = await registerSchema.findByIdAndDelete({_id:req.params.id},function(err,docs){
+        if(err){
+            return res.status(400).send({
+                status : false,
+                Error : err
+            })
+        }else{
+            res.status(200).send({
+                status : true,
+                Data : docs
+            })
         }
     })
 }

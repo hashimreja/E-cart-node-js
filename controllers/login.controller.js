@@ -8,7 +8,6 @@ exports.loginuser = async function (req, res) {
     var login = req.body;
     console.log(login);
     await userschema.findOne({ email: req.body.email }, function (err, data) {
-        console.log('dataaaaaaaaa', data);
         if (!data) {
             return res.send('Invalid email id');
         } else {

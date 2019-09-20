@@ -42,6 +42,7 @@ exports.updateproduct =async function(req,res){
     })
 }
 
+//Delete
 exports.deleteproduct =async function(req,res){
     const data = await productSchema.findByIdAndDelete({_id:req.params.id},function(err,docs){
         if(err){
